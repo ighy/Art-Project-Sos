@@ -19,14 +19,17 @@ def send_file(filename, client_socket):
 def start_client():
     client_socket = socket.socket()
     client_socket.connect((HOST, PORT))
+    while True:
+        filename = input("Enter MP3 filename to send (or type 'exit' to quit): ").strip()
+        if filename.lower() == 'exit':
+            break
+        send_mp3(filename, client_socket)
+
+def send_mp3(filename, client_socket):
     print(f"[CLIENT] Connected to server at {HOST}:{PORT}")
 
     try:
-        while True:
-            filename = input("Enter MP3 filename to send (or type 'exit' to quit): ").strip()
-            if filename.lower() == 'exit':
-                break
-            send_file(filename, client_socket)
+        send_file(filename, client_socket)
     except Exception as e:
         print(f"[!] Error: {e}")
     finally:

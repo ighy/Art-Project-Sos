@@ -1,3 +1,4 @@
+import server
 import RPi.GPIO as gpio
 from recorder import Recorder
 
@@ -26,11 +27,14 @@ class ButtonRecorder (object):
         self.recfile = self.rec.open(self.filename, 'wb')
         self.recfile.start_recording()
 
-rec = ButtonRecorder('nonblocking.wav')
-rec.start()
+index = 0
+while True:
+    index += 1
+    rec = ButtonRecorder(f"dream{index}.wav")
+    rec.start()
 
-try:
-    raw_input()
+    try:
+        raw_input()
 
-except KeyboardInterrupt: pass
+    except KeyboardInterrupt: break
 gpio.cleanup()
