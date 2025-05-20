@@ -66,6 +66,7 @@ class RecAUD:
     def stop(self):
         self.st = 0
         print("Misson accomplished!")
+        server.
 
 
 # Create an object of the ProgramGUI class to begin the program.
