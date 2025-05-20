@@ -1,39 +1,41 @@
 import socket
 import os
 
-HOST = 'localhost'  # Server IP address
-PORT = 5001
+class client:
+    HOST = 'localhost'  # Server IP address
+    PORT = 5001
 
-def send_file(filename, client_socket):
-    if not os.path.isfile(filename):
-        print("[!] File does not exist.")
-        return
+    def __init__(HOST, PORT):
+        
 
-    client_socket.sendall(filename.encode())
-    with open(filename, 'rb') as f:
-        while chunk := f.read(4096):
-            client_socket.sendall(chunk)
-    client_socket.sendall(b"<END>")  # Signal end of file
-    print("[✓] File sent successfully.")
+    def send_file(filename, client_socket):
+        if not os.path.isfile(filename):
+            print("[!] File does not exist.")
+            return
 
-def start_client():
-    client_socket = socket.socket()
-    client_socket.connect((HOST, PORT))
-    while True:
-        filename = input("Enter MP3 filename to send (or type 'exit' to quit): ").strip()
-        if filename.lower() == 'exit':
-            break
-        send_mp3(filename, client_socket)
+        client_socket.sendall(filename.encode())
+        with open(filename, 'rb') as f:
+            while chunk := f.read(4096):
+                client_socket.sendall(chunk)
+        client_socket.sendall(b"<END>")  # Signal end of file
+        print("[✓] File sent successfully.")
 
-def send_mp3(filename, client_socket):
-    print(f"[CLIENT] Connected to server at {HOST}:{PORT}")
+    def start_client():
+        client_socket = socket.socket()
+        client_socket.connect((self.HOST, self.PORT))
+        while True:
+            filename = input("Enter MP3 filename to send (or type 'exit' to quit): ").strip()
+            if filename.lower() == 'exit':
+                break
+            send_mp3(filename, client_socket)
 
-    try:
-        send_file(filename, client_socket)
-    except Exception as e:
-        print(f"[!] Error: {e}")
-    finally:
-        client_socket.close()
-        print("[CLIENT] Disconnected.")
+    def send_mp3(filename, client_socket):
+        print(f"[CLIENT] Connected to server at {HOST}:{PORT}")
 
-start_client()
+        try:
+            send_file(filename, client_socket)
+        except Exception as e:
+            print(f"[!] Error: {e}")
+        finally:
+            client_socket.close()
+            print("[CLIENT] Disconnected.")

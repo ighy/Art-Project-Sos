@@ -5,11 +5,13 @@ import tkinter.messagebox
 import pyaudio
 import wave
 import os
-
+import time
+import server
 
 class RecAUD:
+    index = 0
 
-    def __init__(self, chunk=3024, frmat=pyaudio.paInt16, channels=2, rate=44100, py=pyaudio.PyAudio()):
+    def __init__(self, chunk=3024, frmat=pyaudio.paInt16, channels=1, rate=44100, py=pyaudio.PyAudio()):
 
         # Start Tkinter and set Title
         self.main = tkinter.Tk()
@@ -53,7 +55,8 @@ class RecAUD:
 
         stream.close()
 
-        wf = wave.open('test_recording.wav', 'wb')
+        wf = wave.open(f'recording_{self.index}.wav', 'wb')
+        self.index += 1
         wf.setnchannels(self.CHANNELS)
         wf.setsampwidth(self.p.get_sample_size(self.FORMAT))
         wf.setframerate(self.RATE)
@@ -62,6 +65,7 @@ class RecAUD:
 
     def stop(self):
         self.st = 0
+        print("Misson accomplished!")
 
 
 # Create an object of the ProgramGUI class to begin the program.
