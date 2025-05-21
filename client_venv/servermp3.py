@@ -1,6 +1,7 @@
 import socket
 import threading
 import os
+import analyser
 
 HOST = 'localhost'
 PORT = 5001
@@ -23,6 +24,7 @@ def handle_client(conn, addr):
                         break
                     f.write(data)
             print(f"[✓] File {filename} received from {addr}")
+            analyser.add_file(filename)
     except Exception as e:
         print(f"[!] Error with {addr}: {e}")
     finally:

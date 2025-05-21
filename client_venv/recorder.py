@@ -5,7 +5,6 @@ import tkinter.messagebox
 import pyaudio
 import wave
 import os
-import time
 import clientmp3
 
 class RecAUD:
