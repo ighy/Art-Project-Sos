@@ -1,7 +1,6 @@
 import socket
 import threading
 import os
-import analyser
 
 HOST = 'localhost'
 PORT = 5001
