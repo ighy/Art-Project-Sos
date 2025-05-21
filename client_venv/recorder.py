@@ -32,7 +32,7 @@ class RecAUD:
         self.buttons.pack(fill=tk.BOTH)
 
         self.index = 0
-        self.client = clientmp3()
+        self.client = clientmp3.ClientMp3()
 
         # Start and Stop buttons
         self.strt_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Start Recording', command=lambda: self.start_record())
