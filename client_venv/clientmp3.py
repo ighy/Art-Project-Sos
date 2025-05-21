@@ -1,41 +1,41 @@
 import socket
 import os
 
-class client:
-    HOST = 'localhost'  # Server IP address
-    PORT = 5001
+class ClientMp3:
+    def __init__(self):
+        self.HOST = 'localhost'  # Server IP address
+        self.PORT = 5001
 
-    def __init__(HOST, PORT):
+        self.client_socket = socket.socket()
+        self.client_socket.connect((self.HOST, self.PORT))
         
 
-    def send_file(filename, client_socket):
+    def send_file(self, filename):
         if not os.path.isfile(filename):
             print("[!] File does not exist.")
             return
 
-        client_socket.sendall(filename.encode())
+        self.client_socket.sendall(filename.encode())
         with open(filename, 'rb') as f:
             while chunk := f.read(4096):
-                client_socket.sendall(chunk)
-        client_socket.sendall(b"<END>")  # Signal end of file
+                self.client_socket.sendall(chunk)
+        self.client_socket.sendall(b"<END>")  # Signal end of file
         print("[✓] File sent successfully.")
 
-    def start_client():
-        client_socket = socket.socket()
-        client_socket.connect((self.HOST, self.PORT))
+    def start_client(self):
         while True:
             filename = input("Enter MP3 filename to send (or type 'exit' to quit): ").strip()
             if filename.lower() == 'exit':
                 break
-            send_mp3(filename, client_socket)
+            self.send_mp3(filename)
 
-    def send_mp3(filename, client_socket):
-        print(f"[CLIENT] Connected to server at {HOST}:{PORT}")
+    def send_mp3(self, filename):
+        print(f"[CLIENT] Connected to server at {self.HOST}:{self.PORT}")
 
         try:
-            send_file(filename, client_socket)
+            self.send_file(filename, self.client_socket)
         except Exception as e:
             print(f"[!] Error: {e}")
         finally:
-            client_socket.close()
+            self.client_socket.close()
             print("[CLIENT] Disconnected.")

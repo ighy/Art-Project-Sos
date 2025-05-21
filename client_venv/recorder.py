@@ -6,10 +6,9 @@ import pyaudio
 import wave
 import os
 import time
-import server
+import clientmp3
 
 class RecAUD:
-    index = 0
 
     def __init__(self, chunk=3024, frmat=pyaudio.paInt16, channels=1, rate=44100, py=pyaudio.PyAudio()):
 
@@ -33,7 +32,8 @@ class RecAUD:
         # Pack Frame
         self.buttons.pack(fill=tk.BOTH)
 
-
+        self.index = 0
+        self.client = clientmp3()
 
         # Start and Stop buttons
         self.strt_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Start Recording', command=lambda: self.start_record())
@@ -66,7 +66,6 @@ class RecAUD:
     def stop(self):
         self.st = 0
         print("Misson accomplished!")
-        server.
 
 
 # Create an object of the ProgramGUI class to begin the program.
