@@ -1,42 +1,62 @@
 import tkinter
 import tkinter as tk
 import tkinter.messagebox
-#import pyaudio
+import pyaudio
 import wave
 import os
 
-main = tkinter.Tk()
-collections = []
-main.geometry('500x300')
-main.title('Analyze')
+class Analyser:
+    def __init__(self):
+        self.main = tkinter.Tk()
+        self.collections = []
+        self.main.geometry('500x300')
+        self.main.title('Analyze')
 
-# Set Frames
-buttons = tkinter.Frame(main, padx=120, pady=20)
+        # Other
+        self.column = 0
+        self.row = 0
+        self.filename = ''
 
-# Pack Frame
-buttons.pack(fill=tk.BOTH)
+        # Set Frames
+        self.buttons = tkinter.Frame(self.main, padx=120, pady=20)
+        self.buttonList = []
 
-# Start and Stop buttons
-index = 0
+        # Pack Frame
+        self.buttons.pack(fill=tk.BOTH)
 
-tkinter.mainloop()
+        # Creating Buttons
+        self.start_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Play', command=lambda: self.play_clip())
+        self.start_button.grid(row=0, column=0, padx=50, pady=5)
+        self.stop_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop', command=lambda: self.stop_clip())
+        self.stop_button.grid(row=0, column=1, columnspan=1, padx=50, pady=5)
+        self.approve_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Approve', command=lambda: self.approve_clip())
+        self.approve_button.grid(row=0, column=2, padx=50, pady=5)
+        self.flag_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Flag', command=lambda: self.flag_clip())
+        self.flag_button.grid(row=0, column=3, columnspan=1, padx=50, pady=5)
+        tkinter.mainloop()
 
-def add_file(filename):
-    play_clip = tkinter.Button(buttons, width=10, padx=10, pady=5, text=f'Play {filename}', command=lambda: play_clip(filename))
-    play_clip.grid(row=0, column=0, padx=50, pady=5)
-    approve_clip = tkinter.Button(buttons, width=10, padx=10, pady=5, text='Approve', command=lambda: approve_clip(filename))
-    approve_clip.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
-    flag_clip = tkinter.Button(buttons, width=10, padx=10, pady=5, text='Flag', command=lambda: flag_clip(filename))
-    flag_clip.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
+    def add_file(self, filename):
+        clip = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text=filename, command=lambda: self.select_clip(filename))
+        clip.grid(row=self.row, column=self.column, padx=50, pady=5)
+        y += 1
+        cur_scolumn += 1
+        self.buttonList.append(clip)
 
-def play_clip(filename):
-    pass
+    def select_clip(self, filename):
+        self.filename = filename
 
-def approve_clip(filename):
-    pass
+    def play_clip(self):
+        pass
 
-def flag_clip(filename):
-    pass
+    def stop_clip(self):
+        pass
 
-add_file("recording_0")
-add_file("recording_1")
+    def approve_clip(self):
+        pass
+
+    def flag_clip(self):
+        pass
+
+analyser = Analyser()
+analyser.add_file("recording_0.wav")
+analyser.add_file("recording_1.wav")

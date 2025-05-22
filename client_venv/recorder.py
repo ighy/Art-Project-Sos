@@ -55,6 +55,7 @@ class RecAUD:
         stream.close()
 
         wf = wave.open(f'recording_{self.index}.wav', 'wb')
+        self.index += 1
         wf.setnchannels(self.CHANNELS)
         wf.setsampwidth(self.p.get_sample_size(self.FORMAT))
         wf.setframerate(self.RATE)
@@ -63,8 +64,7 @@ class RecAUD:
 
     def stop(self):
         self.st = 0
-        self.client.input_handle(self.client, f'recording_{self.index}.wav')
-        self.index += 1
+        self.client.handle_input(f'recording_{self.index}.wav')
         print("Misson accomplished!")
 
 
