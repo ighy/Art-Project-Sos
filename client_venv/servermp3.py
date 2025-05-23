@@ -2,47 +2,46 @@ import socket
 import threading
 import os
 
-HOST = 'localhost'
-PORT = 5001
+class ServerMp3:
+    def __init__(self, funct):
+        self.HOST = 'localhost'
+        self.PORT = 5001
 
-recieving_state = 0
+        self.recieving_state = 0
+        self.server_socket = socket.socket()
+        self.server_socket.bind((self.HOST, self.PORT))
+        self.server_socket.listen(5)
+        self.recieving_state = 1
+        print(f"[SERVER] Listening on {self.HOST}:{self.PORT}...")
 
-def handle_client(conn, addr):
-    print(f"[+] Connected by {addr}")
-    try:
         while True:
-            # Receive filename
-            filename = conn.recv(1024).decode()
-            if not filename:
-                break
-            print(f"[>] Receiving file: {filename}")
-            with open(f"received_{filename}", 'wb') as f:
-                while True:
-                    data = conn.recv(4096)
-                    if not data or data.endswith(b"<END>"):
-                        if data.endswith(b"<END>"):
-                            f.write(data[:-5])  # Remove the <END> marker
-                        break
-                    f.write(data)
-            print(f"[✓] File {filename} received from {addr}")
-    except Exception as e:
-        print(f"[!] Error with {addr}: {e}")
-    finally:
-        conn.close()
-        print(f"[-] Disconnected from {addr}")
+            conn, addr = self.server_socket.accept()
+            threading.Thread(target=self.handle_client, args=(conn, addr, funct), daemon=True).start()
 
-def start_server():
-    server_socket = socket.socket()
-    server_socket.bind((HOST, PORT))
-    server_socket.listen(5)
-    recieving_state = 1
-    print(f"[SERVER] Listening on {HOST}:{PORT}...")
+    def handle_client(self, conn, addr, funct):
+        print(f"[+] Connected by {addr}")
+        try:
+            while True:
+                # Receive filename
+                filename = conn.recv(1024).decode()
+                if not filename:
+                    break
+                print(f"[>] Receiving file: {filename}")
+                with open(f"received_{filename}", 'wb') as f:
+                    while self.recieving_state == 1:
+                        data = conn.recv(4096)
+                        #if not data or data.endswith(b"<END>"):
+                        #    if data.endswith(b"<END>"):
+                        #        f.write(data[:-5])  # Remove the <END> marker
+                        #    break
+                        f.write(data)
+                print(f"[✓] File {filename} received from {addr}")
+                funct(filename)
+        except Exception as e:
+            print(f"[!] Error with {addr}: {e}")
+        finally:
+            conn.close()
+            print(f"[-] Disconnected from {addr}")
 
-    while True:
-        conn, addr = server_socket.accept()
-        threading.Thread(target=handle_client, args=(conn, addr), daemon=True).start()
-
-def end_server():
-    recieving_state = 0
-
-start_server()
+    def end_server(self):
+        self.recieving_state = 0

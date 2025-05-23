@@ -1,10 +1,10 @@
-from functools import partial
 import tkinter
 import tkinter as tk
 import tkinter.messagebox
 import pyaudio
 import wave
 import os
+import servermp3
 
 class Analyser:
     def __init__(self):
@@ -17,6 +17,7 @@ class Analyser:
         self.column = 0
         self.row = 1
         self.filename = ''
+        self.server = servermp3.ServerMp3(self.add_file)
 
         # Set Frames
         self.buttons = tkinter.Frame(self.main, padx=120, pady=20)
@@ -57,6 +58,4 @@ class Analyser:
         pass
 
 analyser = Analyser()
-analyser.add_file("recording_0.wav")
-analyser.add_file("recording_1.wav")
 tkinter.mainloop()
