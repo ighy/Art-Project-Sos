@@ -34,14 +34,12 @@ class Analyser:
         self.approve_button.grid(row=0, column=2, padx=50, pady=5)
         self.flag_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Flag', command=lambda: self.flag_clip)
         self.flag_button.grid(row=0, column=3, columnspan=1, padx=50, pady=5)
-        #tkinter.mainloop()
 
     def add_file(self, filename):
-        clip = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text=filename, command=partial(self.select_clip, filename))
+        clip = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text=filename, command=lambda str=filename: self.select_clip(str))
         clip.grid(row=self.row, column=self.column, padx=50, pady=5)
         self.column += 1
         self.buttonList.append(clip)
-        tkinter.mainloop()
 
     def select_clip(self, filename):
         self.filename = filename
@@ -61,3 +59,4 @@ class Analyser:
 analyser = Analyser()
 analyser.add_file("recording_0.wav")
 analyser.add_file("recording_1.wav")
+tkinter.mainloop()

@@ -1,16 +1,17 @@
 import socket
 import threading
 import os
-import analyser
 
 HOST = 'localhost'
 PORT = 5001
+
+recieving_state = 0
 
 def handle_client(conn, addr):
     print(f"[+] Connected by {addr}")
     try:
         while True:
-            # Receivefilename
+            # Receive filename
             filename = conn.recv(1024).decode()
             if not filename:
                 break
@@ -24,7 +25,6 @@ def handle_client(conn, addr):
                         break
                     f.write(data)
             print(f"[✓] File {filename} received from {addr}")
-            analyser.add_file(filename)
     except Exception as e:
         print(f"[!] Error with {addr}: {e}")
     finally:
@@ -35,10 +35,14 @@ def start_server():
     server_socket = socket.socket()
     server_socket.bind((HOST, PORT))
     server_socket.listen(5)
+    recieving_state = 1
     print(f"[SERVER] Listening on {HOST}:{PORT}...")
 
     while True:
         conn, addr = server_socket.accept()
         threading.Thread(target=handle_client, args=(conn, addr), daemon=True).start()
+
+def end_server():
+    recieving_state = 0
 
 start_server()

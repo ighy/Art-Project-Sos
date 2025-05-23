@@ -31,16 +31,23 @@ class RecAUD:
         # Pack Frame
         self.buttons.pack(fill=tk.BOTH)
 
-        self.index = 0
-        self.client = clientmp3.ClientMp3()
-
         # Start and Stop buttons
         self.strt_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Start Recording', command=lambda: self.start_record())
         self.strt_rec.grid(row=0, column=0, padx=50, pady=5)
         self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
         self.stop_rec.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
 
+        #Other
+        self.index = 0
+        self.client = clientmp3.ClientMp3()
+
+        while os.path.exists(self.get_directory()):
+            self.index += 1
+
         tkinter.mainloop()
+
+    def get_directory(self):
+        return f'audio_files/recording_{self.index}.wav'
 
     def start_record(self):
         self.st = 1
@@ -54,17 +61,18 @@ class RecAUD:
 
         stream.close()
 
-        wf = wave.open(f'recording_{self.index}.wav', 'wb')
-        self.index += 1
+        wf = wave.open(self.get_directory(), 'wb')
         wf.setnchannels(self.CHANNELS)
         wf.setsampwidth(self.p.get_sample_size(self.FORMAT))
         wf.setframerate(self.RATE)
         wf.writeframes(b''.join(self.frames))
         wf.close()
 
+        self.client.handle_input(self.get_directory())
+        self.index += 1
+
     def stop(self):
         self.st = 0
-        self.client.handle_input(f'recording_{self.index}.wav')
         print("Misson accomplished!")
 
 
