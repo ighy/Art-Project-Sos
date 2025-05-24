@@ -1,6 +1,7 @@
 import tkinter
 import tkinter as tk
 import tkinter.messagebox
+import threading
 import pyaudio
 import wave
 import os
@@ -17,7 +18,7 @@ class Analyser:
         self.column = 0
         self.row = 1
         self.filename = ''
-        self.server = servermp3.ServerMp3(self.add_file)
+        self.server = servermp3.ServerMp3()
 
         # Set Frames
         self.buttons = tkinter.Frame(self.main, padx=120, pady=20)
@@ -35,12 +36,18 @@ class Analyser:
         self.approve_button.grid(row=0, column=2, padx=50, pady=5)
         self.flag_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Flag', command=lambda: self.flag_clip)
         self.flag_button.grid(row=0, column=3, columnspan=1, padx=50, pady=5)
+        self.flag_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='End Server', command=lambda: self.server.end_server)
+        self.flag_button.grid(row=0, column=4, columnspan=1, padx=50, pady=5)
 
     def add_file(self, filename):
-        clip = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text=filename, command=lambda str=filename: self.select_clip(str))
+        clip = tkinter.Button(self.buttons, width=15, padx=10, pady=5, text=str(filename).split("/")[1], command=lambda text=filename: self.select_clip(text))
         clip.grid(row=self.row, column=self.column, padx=50, pady=5)
         self.column += 1
         self.buttonList.append(clip)
+
+        if self.column > 4: return
+        self.column = 0
+        self.row += 1
 
     def select_clip(self, filename):
         self.filename = filename
@@ -58,4 +65,5 @@ class Analyser:
         pass
 
 analyser = Analyser()
+threading.Thread(target=analyser.server.start_server, args=(analyser.add_file,), daemon=True).start()
 tkinter.mainloop()

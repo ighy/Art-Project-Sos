@@ -36,7 +36,8 @@ class RecAUD:
         self.strt_rec.grid(row=0, column=0, padx=50, pady=5)
         self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
         self.stop_rec.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
-
+        self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Quit Sending', command=lambda: self.client.close_socket())
+        self.stop_rec.grid(row=2, column=0, columnspan=1, padx=50, pady=5)
         #Other
         self.index = 0
         self.client = clientmp3.ClientMp3()

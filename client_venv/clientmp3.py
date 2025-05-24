@@ -3,9 +3,10 @@ import os
 
 class ClientMp3:
     
-    def __init__(self):
-        self.HOST = 'localhost'  # Server IP address
-        self.PORT = 5001
+    def __init__(self, HOST='localhost', PORT=5001):
+        self.HOST = HOST
+        self.PORT = PORT
+        self.sending_state = 1
         
         self.client_socket = socket.socket()
         self.client_socket.connect((self.HOST, self.PORT))
@@ -19,9 +20,6 @@ class ClientMp3:
             self.send_file(filename)
         except Exception as e:
             print(f"[!] Error: {e}")
-        finally:
-            self.client_socket.close()
-            print("[CLIENT] Disconnected.")
 
     def send_file(self, filename):
         if not os.path.isfile(filename):
@@ -34,3 +32,7 @@ class ClientMp3:
                 self.client_socket.sendall(chunk)
         self.client_socket.sendall(b"<END>")  # Signal end of file
         print("[✓] File sent successfully.")
+
+    def close_socket(self):
+        self.client_socket.close()
+        print("[CLIENT] Disconnected.")
