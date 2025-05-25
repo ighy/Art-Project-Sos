@@ -25,20 +25,6 @@ class RecAUD:
         self.st = 1
         self.stream = self.p.open(format=self.FORMAT, channels=self.CHANNELS, rate=self.RATE, input=True, frames_per_buffer=self.CHUNK)
 
-        # Set Frames
-        #self.buttons = tkinter.Frame(self.main, padx=120, pady=20)
-
-        # Pack Frame
-        #self.buttons.pack(fill=tk.BOTH)
-
-        # Start and Stop buttons
-        #self.strt_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Start Recording', command=lambda: self.start_record())
-        #self.strt_rec.grid(row=0, column=0, padx=50, pady=5)
-        #self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
-        #self.stop_rec.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
-        #self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Quit Sending', command=lambda: self.client.close_socket())
-        #self.stop_rec.grid(row=2, column=0, columnspan=1, padx=50, pady=5)
-
         #Other
         self.index = 0
         self.client = clientmp3.ClientMp3()
@@ -59,6 +45,7 @@ class RecAUD:
         title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Ariel", 20))
         title.pack()
 
+        #This button will 'move' to the recording screen
         startButton = tk.Button(self.main, text="Record Your Dream", font=("Ariel", 15), command = self.recordingScreen)
         startButton.pack()
 
@@ -66,38 +53,42 @@ class RecAUD:
 
     #Screen shown when recording is in progress
     def recordingScreen(self):
-        #TODO: Implement a timer function
-        timer = 0
+
+        timer = -1 #TODO: Implement a timer function
 
         self.clearScreen()
 
+        #initialize timer, clock, and stop button
         title = tk.Label(self.main, text="RECORDING IN PROGRESS", font=("Ariel", 40))
         title.pack()
         clock = tk.Label(self.main, text=f"timer: {timer} seconds left")
         clock.pack()
-
         stop_rec = tkinter.Button(self.main, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
         stop_rec.pack()
 
+        #start recording
         self.start_record()
 
-        if timer >= 120 or self.st == 0:
+        #To stop recording by any means, simply set self.st to 0
+        if self.st == 0:
+            #After recording is finished, loads the uploading screen
             self.uploadScreen()
             pass
 
 
     #Screen shown when uploads are in progress
+    #maybe implement a progress bar??? idk
     def uploadScreen(self):
         self.clearScreen()
         title = tk.Label(self.main, text="yup mhm uploading yeah thats really cool")
         title.pack()
 
+        #after this, should show a quick thank you message before looping back to the intro screen
+
     #Clear the screen so different widgets don't show up where they are not supposed to. Should be called at the beginning of every screen-related function
     def clearScreen(self):
         for widget in self.main.winfo_children():
             widget.destroy()
-
-
 
     def get_directory(self):
         return f'audio_files/recording_{self.index}.wav'
