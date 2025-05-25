@@ -46,3 +46,6 @@ class ServerMp3:
 
     def end_server(self):
         self.recieving_state = 0
+
+
+ServerMp3()

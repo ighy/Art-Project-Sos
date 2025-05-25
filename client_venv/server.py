@@ -29,7 +29,7 @@ def handle_client(client_socket, addr):
             break
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind(('localhost', 12345))
+server_socket.bind(('localhost', 5001))
 server_socket.listen(5)  # Allow up to 5 queued connections
 print("Server is listening...")
 

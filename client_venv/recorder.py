@@ -47,6 +47,52 @@ class RecAUD:
 
         tkinter.mainloop()
 
+
+    #Show the screen people will see when they first go to record
+
+    def introScreen(self):
+        self.clearScreen()
+
+        title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Ariel", 40))
+        title.pack()
+
+        startButton = tk.Button(self.main, text="Record Your Dream", font=("Ariel", 40), command = self.recordingScreen)
+        startButton.pack()
+
+    #Screen shown when recording is in progress
+    def recordingScreen(self):
+        #TODO: Implement a timer function
+        timer = 0
+
+        self.clearScreen()
+
+        title = tk.Label(self.main, text="RECORDING IN PROGRESS", font=("Ariel", 40))
+        title.pack()
+        clock = tk.Label(self.main, text=f"timer: {timer} seconds left")
+        clock.pack()
+
+        stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
+        stop_rec.pack()
+
+        self.start_record()
+
+        if timer >= 120 or self.st == 0:
+            self.uploadScreen()
+            pass
+
+
+    #Screen shown when uploads are in progress
+    def uploadScreen(self):
+        title = tk.Label(self.main, text="yup mhm uploading yeah thats really cool")
+        title.pack()
+
+    #Clear the screen so different widgets don't show up where they are not supposed to. Should be called at the beginning of every screen-related function
+    def clearScreen(self):
+        for widget in self.main.winfo_children():
+            widget.destroy()
+
+
+
     def get_directory(self):
         return f'audio_files/recording_{self.index}.wav'
 
@@ -75,6 +121,8 @@ class RecAUD:
     def stop(self):
         self.st = 0
         print("Misson accomplished!")
+
+
 
 
 # Create an object of the ProgramGUI class to begin the program.
