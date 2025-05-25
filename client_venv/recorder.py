@@ -26,18 +26,19 @@ class RecAUD:
         self.stream = self.p.open(format=self.FORMAT, channels=self.CHANNELS, rate=self.RATE, input=True, frames_per_buffer=self.CHUNK)
 
         # Set Frames
-        self.buttons = tkinter.Frame(self.main, padx=120, pady=20)
+        #self.buttons = tkinter.Frame(self.main, padx=120, pady=20)
 
         # Pack Frame
-        self.buttons.pack(fill=tk.BOTH)
+        #self.buttons.pack(fill=tk.BOTH)
 
         # Start and Stop buttons
-        self.strt_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Start Recording', command=lambda: self.start_record())
-        self.strt_rec.grid(row=0, column=0, padx=50, pady=5)
-        self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
-        self.stop_rec.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
-        self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Quit Sending', command=lambda: self.client.close_socket())
-        self.stop_rec.grid(row=2, column=0, columnspan=1, padx=50, pady=5)
+        #self.strt_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Start Recording', command=lambda: self.start_record())
+        #self.strt_rec.grid(row=0, column=0, padx=50, pady=5)
+        #self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
+        #self.stop_rec.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
+        #self.stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Quit Sending', command=lambda: self.client.close_socket())
+        #self.stop_rec.grid(row=2, column=0, columnspan=1, padx=50, pady=5)
+
         #Other
         self.index = 0
         self.client = clientmp3.ClientMp3()
@@ -45,19 +46,23 @@ class RecAUD:
         while os.path.exists(self.get_directory()):
             self.index += 1
 
-        tkinter.mainloop()
+
+        #Start the main loop by going to the main screen
+        self.introScreen()
 
 
     #Show the screen people will see when they first go to record
 
     def introScreen(self):
-        self.clearScreen()
+        #self.clearScreen()
 
-        title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Ariel", 40))
+        title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Ariel", 20))
         title.pack()
 
-        startButton = tk.Button(self.main, text="Record Your Dream", font=("Ariel", 40), command = self.recordingScreen)
+        startButton = tk.Button(self.main, text="Record Your Dream", font=("Ariel", 15), command = self.recordingScreen)
         startButton.pack()
+
+        self.main.mainloop()
 
     #Screen shown when recording is in progress
     def recordingScreen(self):
@@ -71,7 +76,7 @@ class RecAUD:
         clock = tk.Label(self.main, text=f"timer: {timer} seconds left")
         clock.pack()
 
-        stop_rec = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
+        stop_rec = tkinter.Button(self.main, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
         stop_rec.pack()
 
         self.start_record()
@@ -83,6 +88,7 @@ class RecAUD:
 
     #Screen shown when uploads are in progress
     def uploadScreen(self):
+        self.clearScreen()
         title = tk.Label(self.main, text="yup mhm uploading yeah thats really cool")
         title.pack()
 
