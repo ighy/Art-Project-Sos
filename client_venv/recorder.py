@@ -40,7 +40,7 @@ class RecAUD:
     #Show the screen people will see when they first go to record
 
     def introScreen(self):
-        #self.clearScreen()
+        self.clearScreen()
 
         title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Ariel", 20))
         title.pack()
@@ -54,7 +54,7 @@ class RecAUD:
     #Screen shown when recording is in progress
     def recordingScreen(self):
 
-        timer = -1 #TODO: Implement a timer function
+        timer = 60 #TODO: Implement a timer function
 
         self.clearScreen()
 
@@ -63,8 +63,7 @@ class RecAUD:
         title.pack()
         clock = tk.Label(self.main, text=f"timer: {timer} seconds left")
         clock.pack()
-        stop_rec = tkinter.Button(self.main, width=10, padx=10, pady=5, text='Stop Recording', command=lambda: self.stop())
-        stop_rec.pack()
+        self.tickTimer(timer + 1, clock)
 
         #start recording
         self.start_record()
@@ -80,8 +79,10 @@ class RecAUD:
     #maybe implement a progress bar??? idk
     def uploadScreen(self):
         self.clearScreen()
-        title = tk.Label(self.main, text="yup mhm uploading yeah thats really cool")
+        title = tk.Label(self.main, text="Thanks for reqording your dream :)")
         title.pack()
+        finishButton = tk.Button(self.main, text="Done", font=("Ariel", 15), command = self.introScreen)
+        finishButton.pack()
 
         #after this, should show a quick thank you message before looping back to the intro screen
 
@@ -100,7 +101,7 @@ class RecAUD:
         while self.st == 1:
             data = stream.read(self.CHUNK)
             self.frames.append(data)
-            print("* recording")
+            #print("* recording")
             self.main.update()
 
         stream.close()
@@ -119,8 +120,14 @@ class RecAUD:
         self.st = 0
         print("Misson accomplished!")
 
-
-
+    def tickTimer(self, timer, label):
+        timer -= 1
+        label.config(text=f"timer: {timer} seconds left")
+        
+        if timer > 0:
+            self.main.after(1000, lambda t=timer, l=label: self.tickTimer(t, l))
+        else:
+            self.stop()
 
 # Create an object of the ProgramGUI class to begin the program.
 guiAUD = RecAUD()
