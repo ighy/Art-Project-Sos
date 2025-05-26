@@ -28,7 +28,7 @@ class Analyser:
         self.buttons.pack(fill=tk.BOTH)
 
         # Creating Buttons
-        self.start_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Play', command=lambda: self.play_clip)
+        self.start_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Play', command=self.play_clip)
         self.start_button.grid(row=0, column=0, padx=50, pady=5)
         self.stop_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='Stop', command=lambda: self.stop_clip)
         self.stop_button.grid(row=0, column=1, columnspan=1, padx=50, pady=5)
@@ -41,19 +41,46 @@ class Analyser:
 
     def add_file(self, filename):
         clip = tkinter.Button(self.buttons, width=15, padx=10, pady=5, text=str(filename).split("/")[1], command=lambda text=filename: self.select_clip(text))
-        clip.grid(row=self.row, column=self.column, padx=50, pady=5)
+        clip.grid(row=self.row, column=self.column, padx=45, pady=5)
         self.column += 1
         self.buttonList.append(clip)
 
-        if self.column > 4: return
+        if self.column < 5: return
         self.column = 0
         self.row += 1
 
     def select_clip(self, filename):
+        print("[Analyser] Setting Filename")
         self.filename = filename
 
     def play_clip(self):
-        pass
+        print("[Analyser] Playing audio")
+        chunk = 1024
+        wf = wave.open(self.filename, 'rb')
+
+        # create an audio object
+        p = pyaudio.PyAudio()
+
+        # open stream based on the wave object which has been input.
+        stream = p.open(format =
+                        p.get_format_from_width(wf.getsampwidth()),
+                        channels = wf.getnchannels(),
+                        rate = wf.getframerate(),
+                        output = True)
+
+        # read data (based on the chunk size)
+        data = wf.readframes(chunk)
+
+        # play stream (looping from beginning of file to the end)
+        while data:
+            # writing to the stream is what *actually* plays the sound.
+            stream.write(data)
+            data = wf.readframes(chunk)
+
+        # cleanup stuff.
+        wf.close()
+        stream.close()    
+        p.terminate()
 
     def stop_clip(self):
         pass
