@@ -54,7 +54,7 @@ class RecAUD:
     #Screen shown when recording is in progress
     def recordingScreen(self):
 
-        timer = 60 #TODO: Implement a timer function
+        timer = 60 
 
         self.clearScreen()
 
@@ -63,6 +63,10 @@ class RecAUD:
         title.pack()
         clock = tk.Label(self.main, text=f"timer: {timer} seconds left")
         clock.pack()
+        message = tk.Label(self.main, text="If you are finished early or want to redo, press stop")
+        message.pack()
+        stopButton = tk.Button(self.main, text="Stop Recording", command=self.stop)
+        stopButton.pack()
         self.tickTimer(timer + 1, clock)
 
         #start recording
@@ -74,12 +78,27 @@ class RecAUD:
             self.uploadScreen()
             pass
 
-
+    def confirmationScreen(self): 
+        self.clearScreen()
+        #Create two frames to allow both a pack and grid arrangement 
+        frame1 = tk.Frame(self.main)
+        frame1.pack()
+        label = tk.Label(frame1, text="Recording complete! Would you like to upload your recording or try again?", font=("Ariel", 20)) 
+        label.pack()
+        frame2 = tk.Frame(self.main)
+        frame2.pack(pady=30)
+        #Maybe implement a button that allows them to just quit and leave?
+        uploadButton = tk.Button(frame2, text="Upload", command=self.uploadScreen)
+        retryButton = tk.Button(frame2, text="Try again", command=self.recordingScreen)
+        uploadButton.grid(row=0, column=0)
+        retryButton.grid(row=0, column=1)
+        #Apparently putting mainloop here prevents a bug where the program becomes unresponse after recording stops due to timeout
+        self.main.mainloop()
     #Screen shown when uploads are in progress
     #maybe implement a progress bar??? idk
     def uploadScreen(self):
         self.clearScreen()
-        title = tk.Label(self.main, text="Thanks for reqording your dream :)")
+        title = tk.Label(self.main, text="Thanks for recording your dream :)")
         title.pack()
         finishButton = tk.Button(self.main, text="Done", font=("Ariel", 15), command = self.introScreen)
         finishButton.pack()
@@ -101,7 +120,7 @@ class RecAUD:
         while self.st == 1:
             data = stream.read(self.CHUNK)
             self.frames.append(data)
-            #print("* recording")
+            print("* recording")
             self.main.update()
 
         stream.close()
@@ -116,9 +135,11 @@ class RecAUD:
         self.client.handle_input(self.get_directory())
         self.index += 1
 
+    #This function will stop the recording and move to the next screen
     def stop(self):
         self.st = 0
         print("Misson accomplished!")
+        self.confirmationScreen()
 
     def tickTimer(self, timer, label):
         timer -= 1
