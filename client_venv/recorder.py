@@ -97,6 +97,7 @@ class RecAUD:
     #Screen shown when uploads are in progress
     #maybe implement a progress bar??? idk
     def uploadScreen(self):
+        self.saveAudio()
         self.clearScreen()
         title = tk.Label(self.main, text="Thanks for recording your dream :)")
         title.pack()
@@ -123,17 +124,8 @@ class RecAUD:
             print("* recording")
             self.main.update()
 
+        print("Loop exited")
         stream.close()
-
-        wf = wave.open(self.get_directory(), 'wb')
-        wf.setnchannels(self.CHANNELS)
-        wf.setsampwidth(self.p.get_sample_size(self.FORMAT))
-        wf.setframerate(self.RATE)
-        wf.writeframes(b''.join(self.frames))
-        wf.close()
-
-        self.client.handle_input(self.get_directory())
-        self.index += 1
 
     #This function will stop the recording and move to the next screen
     def stop(self):
@@ -149,6 +141,17 @@ class RecAUD:
             self.main.after(1000, lambda t=timer, l=label: self.tickTimer(t, l))
         else:
             self.stop()
+
+    def saveAudio(self):
+        wf = wave.open(self.get_directory(), 'wb')
+        wf.setnchannels(self.CHANNELS)
+        wf.setsampwidth(self.p.get_sample_size(self.FORMAT))
+        wf.setframerate(self.RATE)
+        wf.writeframes(b''.join(self.frames))
+        wf.close()
+
+        self.client.handle_input(self.get_directory())
+        self.index += 1
 
 # Create an object of the ProgramGUI class to begin the program.
 guiAUD = RecAUD()

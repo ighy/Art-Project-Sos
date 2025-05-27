@@ -17,6 +17,7 @@ class Analyser:
         # Other
         self.column = 0
         self.row = 1
+        self.repeating = 1
         self.filename = ''
         self.server = servermp3.ServerMp3()
 
@@ -44,6 +45,7 @@ class Analyser:
         clip.grid(row=self.row, column=self.column, padx=45, pady=5)
         self.column += 1
         self.buttonList.append(clip)
+        self.collections.append(filename)
 
         if self.column < 5: return
         self.column = 0
@@ -82,6 +84,17 @@ class Analyser:
         stream.close()    
         p.terminate()
 
+    def play_repeating_clips(self):
+        index = 0
+        while self.repeating == 1:
+            if len(self.collections) == 0: continue
+            self.filename = self.collections[index]
+            index += 1
+            self.play_clip()
+
+            if index < len(self.collections): continue
+            index = 0
+
     def stop_clip(self):
         pass
 
@@ -91,6 +104,10 @@ class Analyser:
     def flag_clip(self):
         pass
 
+    def stop_repeating(self):
+        self.repeating = 0
+
 analyser = Analyser()
 threading.Thread(target=analyser.server.start_server, args=(analyser.add_file,), daemon=True).start()
+threading.Thread(target=analyser.play_repeating_clips, daemon=True).start()
 tkinter.mainloop()
