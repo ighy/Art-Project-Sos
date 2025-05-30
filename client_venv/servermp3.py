@@ -3,7 +3,7 @@ import threading
 import os
 
 class ServerMp3:
-    def __init__(self, HOST='localhost', PORT=5001):
+    def __init__(self, HOST="10.150.108.204", PORT=5001):
         self.HOST = HOST
         self.PORT = PORT
 

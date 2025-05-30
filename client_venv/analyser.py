@@ -40,6 +40,10 @@ class Analyser:
         self.flag_button = tkinter.Button(self.buttons, width=10, padx=10, pady=5, text='End Server', command=lambda: self.server.end_server)
         self.flag_button.grid(row=0, column=4, columnspan=1, padx=50, pady=5)
 
+        folderPath = "received_audio_files"
+        for filename in os.listdir(folderPath):
+            self.add_file(f"{folderPath}/{filename}")
+
     def add_file(self, filename):
         clip = tkinter.Button(self.buttons, width=15, padx=10, pady=5, text=str(filename).split("/")[1], command=lambda text=filename: self.select_clip(text))
         clip.grid(row=self.row, column=self.column, padx=45, pady=5)

@@ -1,6 +1,7 @@
 # Import the necessary modules.
 import tkinter
 import tkinter as tk
+from tkinter import ttk
 import tkinter.messagebox
 import pyaudio
 import wave
@@ -10,11 +11,11 @@ import clientmp3
 class RecAUD:
 
     def __init__(self, chunk=3024, frmat=pyaudio.paInt16, channels=1, rate=44100, py=pyaudio.PyAudio()):
-
         # Start Tkinter and set Title
         self.main = tkinter.Tk()
         self.collections = []
         self.main.geometry('500x300')
+        self.main.configure(bg="lightblue")
         self.main.title('Record')
         self.CHUNK = chunk
         self.FORMAT = frmat
@@ -24,7 +25,7 @@ class RecAUD:
         self.frames = []
         self.st = 1
         self.stream = self.p.open(format=self.FORMAT, channels=self.CHANNELS, rate=self.RATE, input=True, frames_per_buffer=self.CHUNK)
-
+        
         #Other
         self.index = 0
         self.client = clientmp3.ClientMp3()
@@ -42,11 +43,11 @@ class RecAUD:
     def introScreen(self):
         self.clearScreen()
 
-        title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Ariel", 20))
+        title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Comic Sans MS", 40), bg="lightblue")
         title.pack()
 
         #This button will 'move' to the recording screen
-        startButton = tk.Button(self.main, text="Record Your Dream", font=("Ariel", 15), command = self.recordingScreen)
+        startButton = tk.Button(self.main, text="Record Your Dream", font=("Comic Sans MS", 30), bg="hotpink", command = self.recordingScreen)
         startButton.pack()
 
         self.main.mainloop()
@@ -59,13 +60,13 @@ class RecAUD:
         self.clearScreen()
 
         #initialize timer, clock, and stop button
-        title = tk.Label(self.main, text="RECORDING IN PROGRESS", font=("Ariel", 40))
+        title = tk.Label(self.main, text="Recording in Progress...", font=("Comic Sans MS", 40), bg="red")
         title.pack()
-        clock = tk.Label(self.main, text=f"timer: {timer} seconds left")
+        clock = tk.Label(self.main, text=f"timer: {timer} seconds left", font=("Comic Sans MS", 20), bg="lightblue")
         clock.pack()
-        message = tk.Label(self.main, text="If you are finished early or want to redo, press stop")
+        message = tk.Label(self.main, text="If you are finished early or want to redo, press stop", font=("Comic Sans MS", 15), bg="lightblue")
         message.pack()
-        stopButton = tk.Button(self.main, text="Stop Recording", command=self.stop)
+        stopButton = tk.Button(self.main, text="Stop Recording", font=("Comic Sans MS", 20), bg="hotpink", command=self.stop)
         stopButton.pack()
         self.tickTimer(timer + 1, clock)
 
@@ -83,13 +84,13 @@ class RecAUD:
         #Create two frames to allow both a pack and grid arrangement 
         frame1 = tk.Frame(self.main)
         frame1.pack()
-        label = tk.Label(frame1, text="Recording complete! Would you like to upload your recording or try again?", font=("Ariel", 20)) 
+        label = tk.Label(frame1, text="Recording complete! Would you like to upload your recording or try again?", font=("Comic Sans MS", 40), bg="lightblue") 
         label.pack()
         frame2 = tk.Frame(self.main)
         frame2.pack(pady=30)
         #Maybe implement a button that allows them to just quit and leave?
-        uploadButton = tk.Button(frame2, text="Upload", command=self.uploadScreen)
-        retryButton = tk.Button(frame2, text="Try again", command=self.recordingScreen)
+        uploadButton = tk.Button(frame2, text="Upload", font=("Comic Sans MS", 20), bg="hotpink", command=self.uploadScreen)
+        retryButton = tk.Button(frame2, text="Try again", font=("Comic Sans MS", 20), bg="hotpink", command=self.recordingScreen)
         uploadButton.grid(row=0, column=0)
         retryButton.grid(row=0, column=1)
         #Apparently putting mainloop here prevents a bug where the program becomes unresponse after recording stops due to timeout
@@ -99,9 +100,9 @@ class RecAUD:
     def uploadScreen(self):
         self.saveAudio()
         self.clearScreen()
-        title = tk.Label(self.main, text="Thanks for recording your dream :)")
+        title = tk.Label(self.main, text="Thanks for recording your dream :)", font=("Comic Sans MS", 20), bg="lightblue")
         title.pack()
-        finishButton = tk.Button(self.main, text="Done", font=("Ariel", 15), command = self.introScreen)
+        finishButton = tk.Button(self.main, text="Done", font=("Comic Sans MS", 30), bg="hotpink", command = self.introScreen)
         finishButton.pack()
 
         #after this, should show a quick thank you message before looping back to the intro screen
@@ -121,7 +122,7 @@ class RecAUD:
         while self.st == 1:
             data = stream.read(self.CHUNK)
             self.frames.append(data)
-            print("* recording")
+            #print("* recording")
             self.main.update()
 
         print("Loop exited")
