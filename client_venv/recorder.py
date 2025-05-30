@@ -14,7 +14,7 @@ class RecAUD:
         # Start Tkinter and set Title
         self.main = tkinter.Tk()
         self.collections = []
-        self.main.geometry('500x300')
+        self.main.geometry('1000x500')
         self.main.configure(bg="lightblue")
         self.main.title('Record')
         self.CHUNK = chunk
@@ -43,7 +43,7 @@ class RecAUD:
     def introScreen(self):
         self.clearScreen()
 
-        title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Comic Sans MS", 40), bg="lightblue")
+        title = tk.Label(self.main, text="Welcome to the Dream Recording Booth", font=("Comic Sans MS", 35), bg="lightblue")
         title.pack()
 
         #This button will 'move' to the recording screen
@@ -60,7 +60,7 @@ class RecAUD:
         self.clearScreen()
 
         #initialize timer, clock, and stop button
-        title = tk.Label(self.main, text="Recording in Progress...", font=("Comic Sans MS", 40), bg="red")
+        title = tk.Label(self.main, text="Recording in Progress...", font=("Comic Sans MS", 35), bg="red")
         title.pack()
         clock = tk.Label(self.main, text=f"timer: {timer} seconds left", font=("Comic Sans MS", 20), bg="lightblue")
         clock.pack()
@@ -84,8 +84,10 @@ class RecAUD:
         #Create two frames to allow both a pack and grid arrangement 
         frame1 = tk.Frame(self.main)
         frame1.pack()
-        label = tk.Label(frame1, text="Recording complete! Would you like to upload your recording or try again?", font=("Comic Sans MS", 40), bg="lightblue") 
+        label = tk.Label(frame1, text="Recording complete!", font=("Comic Sans MS", 40), bg="lightblue") 
         label.pack()
+        label2 = tk.Label(frame1, text="Would you like to upload your recording or try again?", font=("Comic Sans MS", 30), bg="lightblue")
+        label2.pack()
         frame2 = tk.Frame(self.main)
         frame2.pack(pady=30)
         #Maybe implement a button that allows them to just quit and leave?
@@ -113,7 +115,7 @@ class RecAUD:
             widget.destroy()
 
     def get_directory(self):
-        return f'audio_files/recording_{self.index}.wav'
+        return f'audio_files/recording_{self.index}.mp3'
 
     def start_record(self):
         self.st = 1

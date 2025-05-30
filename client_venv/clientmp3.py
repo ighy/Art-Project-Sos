@@ -3,7 +3,7 @@ import os
 
 class ClientMp3:
     
-    def __init__(self, HOST='localhost', PORT=5001):
+    def __init__(self, HOST='10.150.110.234', PORT=5001):
         self.HOST = HOST
         self.PORT = PORT
         self.sending_state = 1
@@ -26,9 +26,9 @@ class ClientMp3:
             print("[!] File does not exist.")
             return
 
-        self.client_socket.sendall(filename.encode())
+        self.client_socket.sendall(filename.encode('utf-8'))
         with open(filename, 'rb') as f:
-            while chunk := f.read(4096):
+            while chunk := f.read(1024):
                 self.client_socket.sendall(chunk)
         self.client_socket.sendall(b"<END>")  # Signal end of file
         print("[✓] File sent successfully.")
