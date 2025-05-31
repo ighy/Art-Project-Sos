@@ -48,6 +48,7 @@ class RecAUD:
 
         #This button will 'move' to the recording screen
         startButton = tk.Button(self.main, text="Record Your Dream", font=("Comic Sans MS", 30), bg="hotpink", command = self.recordingScreen)
+        startButton.config(height=5, width=25)
         startButton.pack()
 
         self.main.mainloop()
@@ -67,6 +68,7 @@ class RecAUD:
         message = tk.Label(self.main, text="If you are finished early or want to redo, press stop", font=("Comic Sans MS", 15), bg="lightblue")
         message.pack()
         stopButton = tk.Button(self.main, text="Stop Recording", font=("Comic Sans MS", 20), bg="hotpink", command=self.stop)
+        stopButton.config(height=5, width=25)
         stopButton.pack()
         self.tickTimer(timer + 1, clock)
 
@@ -93,8 +95,10 @@ class RecAUD:
         #Maybe implement a button that allows them to just quit and leave?
         uploadButton = tk.Button(frame2, text="Upload", font=("Comic Sans MS", 20), bg="hotpink", command=self.uploadScreen)
         retryButton = tk.Button(frame2, text="Try again", font=("Comic Sans MS", 20), bg="hotpink", command=self.recordingScreen)
-        uploadButton.grid(row=0, column=0)
-        retryButton.grid(row=0, column=1)
+        uploadButton.grid(row=0, column=0, padx=20, pady=10)
+        retryButton.grid(row=0, column=1, padx=20, pady=10)
+        uploadButton.config(height=5, width=25)
+        retryButton.config(height=5, width=25)
         #Apparently putting mainloop here prevents a bug where the program becomes unresponse after recording stops due to timeout
         self.main.mainloop()
     #Screen shown when uploads are in progress
@@ -105,6 +109,7 @@ class RecAUD:
         title = tk.Label(self.main, text="Thanks for recording your dream :)", font=("Comic Sans MS", 20), bg="lightblue")
         title.pack()
         finishButton = tk.Button(self.main, text="Done", font=("Comic Sans MS", 30), bg="hotpink", command = self.introScreen)
+        finishButton.config(height=5, width=25)
         finishButton.pack()
 
         #after this, should show a quick thank you message before looping back to the intro screen

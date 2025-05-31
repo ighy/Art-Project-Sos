@@ -3,7 +3,7 @@ import os
 
 class ClientMp3:
     
-    def __init__(self, HOST='10.150.110.234', PORT=5001):
+    def __init__(self, HOST='localhost', PORT=5001):
         self.HOST = HOST
         self.PORT = PORT
         self.sending_state = 1
